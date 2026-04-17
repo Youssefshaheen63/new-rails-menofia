@@ -1,5 +1,6 @@
 class PostsController < ApplicationController
-  
+   before_action :set_post, only: %i[ show edit update destroy ]
+
   # GET /posts
   def index
     @posts = Post.all 
@@ -7,7 +8,6 @@ class PostsController < ApplicationController
 
   # GET /posts/:id
   def show
-    @post = Post.find(params[:id])
   end
 
   # GET /posts/new
@@ -15,7 +15,7 @@ class PostsController < ApplicationController
      @post = Post.new
   end 
 
-  # Post /posts/commit
+  # Post /posts/
   def create 
     @post = Post.new(title: params[:post][:title], content: params[:post][:content])
     if @post.save
@@ -25,12 +25,12 @@ class PostsController < ApplicationController
     end
   end
 
+  # GET /posts/:id/edit
   def edit
-    @post = Post.find(params[:id])
   end
 
+  # Patch /posts/:id
   def update 
-    @post = Post.find(params[:id])
     if @post.update(title: params[:post][:title], content: params[:post][:content])
       redirect_to @post
     else
@@ -38,9 +38,13 @@ class PostsController < ApplicationController
     end
   end
 
+  # Delete /posts/:id
   def destroy 
-    @post = Post.find(params[:id])
     @post.destroy
     redirect_to posts_path
+  end
+
+  def set_post
+    @post = Post.find(params[:id])
   end
 end
